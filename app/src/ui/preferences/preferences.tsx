@@ -41,6 +41,7 @@ import {
 import { Prompts } from './prompts'
 import { Repository } from '../../models/repository'
 import { Notifications } from './notifications'
+import { Font } from './font'
 
 interface IPreferencesProps {
   readonly dispatcher: Dispatcher
@@ -64,6 +65,7 @@ interface IPreferencesProps {
   readonly selectedExternalEditor: string | null
   readonly selectedShell: Shell
   readonly selectedTheme: ApplicationTheme
+  readonly selectedFontFace: string | null
   readonly repositoryIndicatorsEnabled: boolean
 }
 
@@ -242,7 +244,11 @@ export class Preferences extends React.Component<
             </span>
             <span>
               <Octicon className="icon" symbol={OcticonSymbol.paintbrush} />
-              Appearance
+              Theme
+            </span>
+            <span>
+              <Octicon className="icon" symbol={OcticonSymbol.paintbrush} />
+              Fonts
             </span>
             <span>
               <Octicon className="icon" symbol={OcticonSymbol.bell} />
@@ -347,11 +353,19 @@ export class Preferences extends React.Component<
         )
         break
       }
-      case PreferencesTab.Appearance:
+      case PreferencesTab.Theme:
         View = (
           <Appearance
             selectedTheme={this.props.selectedTheme}
             onSelectedThemeChanged={this.onSelectedThemeChanged}
+          />
+        )
+        break
+      case PreferencesTab.Font:
+        View = (
+          <Font
+            selectedFontFace={this.props.selectedFontFace}
+            onSelectedFontFaceChanged={this.onSelectedFontFaceChanged}
           />
         )
         break
@@ -509,6 +523,10 @@ export class Preferences extends React.Component<
 
   private onSelectedShellChanged = (shell: Shell) => {
     this.setState({ selectedShell: shell })
+  }
+
+  private onSelectedFontFaceChanged = (fontFace: string) => {
+    this.props.dispatcher.setSelectedFontFace(fontFace)
   }
 
   private onSelectedThemeChanged = (theme: ApplicationTheme) => {

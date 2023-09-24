@@ -272,6 +272,9 @@ export interface IAppState {
   /** The currently selected tab for the Branches foldout. */
   readonly selectedBranchesTab: BranchesTab
 
+  /** The selected font face preference */
+  readonly selectedFontFace: string | null
+
   /** The selected appearance (aka theme) preference */
   readonly selectedTheme: ApplicationTheme
 

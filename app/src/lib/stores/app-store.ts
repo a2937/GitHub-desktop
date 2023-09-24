@@ -79,6 +79,8 @@ import {
   getCurrentlyAppliedTheme,
   getPersistedThemeName,
   setPersistedTheme,
+  setPersistedFontFace,
+  getPersistedFontFace
 } from '../../ui/lib/application-theme'
 import {
   getAppMenu,
@@ -512,6 +514,7 @@ export class AppStore extends TypedBaseStore<IAppState> {
 
   private selectedBranchesTab = BranchesTab.Branches
   private selectedTheme = ApplicationTheme.System
+  private selectedFontFace: string | null = null;
   private currentTheme: ApplicableTheme = ApplicationTheme.Light
 
   private useWindowsOpenSSH: boolean = false
@@ -994,6 +997,7 @@ export class AppStore extends TypedBaseStore<IAppState> {
       resolvedExternalEditor: this.resolvedExternalEditor,
       selectedCloneRepositoryTab: this.selectedCloneRepositoryTab,
       selectedBranchesTab: this.selectedBranchesTab,
+      selectedFontFace: this.selectedFontFace,
       selectedTheme: this.selectedTheme,
       currentTheme: this.currentTheme,
       apiRepositories: this.apiRepositoriesStore.getState(),
@@ -2180,6 +2184,11 @@ export class AppStore extends TypedBaseStore<IAppState> {
     this.selectedTheme = getPersistedThemeName()
     // Make sure the persisted theme is applied
     setPersistedTheme(this.selectedTheme)
+
+    this.selectedFontFace = await getPersistedFontFace()
+
+    // Make sure the persisted font face is saved
+    setPersistedFontFace(this.selectedFontFace);
 
     this.currentTheme = await getCurrentlyAppliedTheme()
 
@@ -6492,6 +6501,18 @@ export class AppStore extends TypedBaseStore<IAppState> {
   public _setSelectedTheme(theme: ApplicationTheme) {
     setPersistedTheme(theme)
     this.selectedTheme = theme
+    this.emitUpdate()
+
+    return Promise.resolve()
+  }
+
+  /**
+   * Set the application-wide font size
+   */
+  public _setSelectedFontFace(fontFace: string) {
+    setPersistedFontFace(fontFace)
+
+
     this.emitUpdate()
 
     return Promise.resolve()

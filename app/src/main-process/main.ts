@@ -658,6 +658,10 @@ app.on('ready', () => {
     mainWindow?.focus()
   })
 
+  ipcMain.on('set-font-face', (_, fontFace) => {
+    mainWindow?.setFontFace(fontFace);
+  })
+
   ipcMain.on('set-native-theme-source', (_, themeName) => {
     nativeTheme.themeSource = themeName
   })

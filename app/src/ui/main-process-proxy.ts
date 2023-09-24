@@ -212,6 +212,9 @@ export function onShowInstallingUpdate(eventHandler: () => void) {
 /** Tell the main process to set the native theme source */
 export const setNativeThemeSource = sendProxy('set-native-theme-source', 1)
 
+/** Tell the main process to set the native font face source */
+export const setFontFaceSource = sendProxy('set-font-face', 1)
+
 /** Tell the main process to obtain wether the native theme uses dark colors */
 export const shouldUseDarkColors = invokeProxy('should-use-dark-colors', 0)
 

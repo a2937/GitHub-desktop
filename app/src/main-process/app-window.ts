@@ -41,6 +41,9 @@ export class AppWindow {
   // See https://github.com/desktop/desktop/pull/11162
   private shouldMaximizeOnShow = false
 
+  private lastCssFontFaceKey: string = ""
+
+
   public constructor() {
     const savedWindowState = windowStateKeeper({
       defaultWidth: this.minWidth,
@@ -283,6 +286,41 @@ export class AppWindow {
   /** Selects all the windows web contents */
   public selectAllWindowContents() {
     this.window.webContents.selectAll()
+  }
+
+  public async setFontFace(fontFace: string) {
+    try {
+      // Validate and sanitize the fontFace input
+      const validFontFace = this.sanitizeFontFace(fontFace);
+
+      const cssRule = `body, code, .CodeMirror, .CodeMirror-code, .commit-summary-description, pre { font-family: ${validFontFace} !important; }`;
+
+      if (this.lastCssFontFaceKey !== "") {
+        await this.window.webContents.removeInsertedCSS(this.lastCssFontFaceKey);
+      }
+
+      this.lastCssFontFaceKey = await this.window.webContents.insertCSS(cssRule);
+    } catch (error) {
+      // Handle errors, e.g., log them or show an error message to the user
+      console.error('Error setting font face:', error);
+    }
+  }
+
+  private sanitizeFontFace(fontFace: string): string {
+    // Define a regular expression to match a valid font face rule.
+    // This regex allows letters, numbers, common font family names,
+    // and common font style and weight values.
+    const validFontFaceRegex = /^[a-zA-Z0-9\s,"'-]+$/;
+
+    // Test if the fontFace string matches the validFontFaceRegex.
+    if (validFontFaceRegex.test(fontFace)) {
+      // If it's a valid font face rule, return it.
+      return fontFace;
+    } else {
+      // If it's not valid, return a default font face or handle the error as needed.
+      console.error('Invalid font face input:', fontFace);
+      return 'Helvetica Neue", Helvetica, Arial, sans-serif';
+    }
   }
 
   /** Show the window. */

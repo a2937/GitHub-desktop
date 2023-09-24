@@ -2500,6 +2500,15 @@ export class Dispatcher {
   }
 
   /**
+   * Set the application-wide font-face
+   */
+  public setSelectedFontFace(fontFace: string) {
+    return this.appStore._setSelectedFontFace(fontFace);
+  }
+
+
+
+  /**
    * Set the application-wide theme
    */
   public setSelectedTheme(theme: ApplicationTheme) {
